@@ -1,19 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserContext } from "../../App";
 
 function SingleFood() {
   const [des, setDes] = useState({});
   const { id } = useParams();
+  const { userData } = useContext(UserContext);
+  const navi = useNavigate();
 
   const getSingleFood = async () => {
-    const result = await axios.get(
-      `http://127.0.0.1:8000/api/v1/foods/view/${id}`
-    );
-    console.log(result.data.data);
-    setDes(result.data.data);
+    const result = await axios
+      .get(`http://127.0.0.1:8000/api/v1/foods/view/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userData?.access}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data.data);
+        setDes(response.data.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        if (error.response.status && error.response.status === 401) {
+          navi("/auth/login");
+        }
+      });
   };
   const renderFoods = () => {
     return (
@@ -97,10 +112,10 @@ const Image = styled.img`
   width: 100%;
 `;
 const RightContainer = styled.div`
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  width: 48%;
+  width: 48%; */
 `;
 const ImageSlide = styled.div`
   width: 48%;

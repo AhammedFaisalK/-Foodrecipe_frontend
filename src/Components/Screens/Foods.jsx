@@ -1,15 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../App";
 
 function Foods() {
   const [foods, setFoods] = useState([]);
+  const { userData } = useContext(UserContext);
+  const navi = useNavigate();
+
   const getFoods = async () => {
-    const response = await axios.get("http://127.0.0.1:8000/api/v1/foods/");
-    console.log(response.data.data);
-    setFoods(response.data.data);
+    const response = await axios
+      .get("http://127.0.0.1:8000/api/v1/foods/", {
+        headers: {
+          Authorization: `Bearer ${userData?.access}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data.data);
+        setFoods(response.data.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        if (error.response.status && error.response.status === 401) {
+          navi("/auth/login");
+        }
+      });
   };
   const getFoodRecipes = () => {
     return foods.map((item) => {
@@ -43,8 +61,12 @@ function Foods() {
       </Helmet>
       <BodyContainer>
         <InnerContainer>
-          <Heading>Welcome User</Heading>
-          <SubHeading>Explore Food Recipies </SubHeading>
+          <SubContainer>
+            <Heading>Welcome</Heading>
+            <SubHeading>Add Your Recipie</SubHeading>
+          </SubContainer>
+          <SubHeading>Explore food recipies</SubHeading>
+
           <FoodsList>{getFoodRecipes()}</FoodsList>
         </InnerContainer>
       </BodyContainer>
@@ -111,3 +133,7 @@ const PublisherName = styled.span`
   font-size: 15px;
 `;
 const Icon = styled.img``;
+const SubContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;

@@ -1,14 +1,42 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { UserContext } from "../../App";
+
 function Nav() {
+  const { userData, updateUserData } = useContext(UserContext);
+  const handleLogout = () => {
+    updateUserData({ type: "LOGOUT" });
+  };
   return (
     <>
       <Container>
         <FlexContainer>
-          <Logo>
-            <Image src={require("../assets/images/logo.webp")} />
-          </Logo>
-          <Button>Login</Button>
+          {userData ? (
+            <>
+              {" "}
+              <Logo>
+                <Link to="/home">
+                  <Image src={require("../assets/images/logo.webp")} />
+                </Link>
+              </Logo>
+              <Button onClick={() => handleLogout()}>
+                <Link to="/auth/login">Logout</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Logo>
+                <Link to="/auth/login/">
+                  <Image src={require("../assets/images/logo.webp")} />
+                </Link>
+              </Logo>
+              <Button>
+                {" "}
+                <Link to="/auth/login">Login</Link>
+              </Button>
+            </>
+          )}
         </FlexContainer>
       </Container>
     </>
@@ -43,6 +71,10 @@ const Button = styled.button`
   border-radius: 5px;
   &:hover {
     background-color: black;
+  }
+  a {
+    color: #fff;
+    text-decoration: none;
   }
 `;
 export default Nav;

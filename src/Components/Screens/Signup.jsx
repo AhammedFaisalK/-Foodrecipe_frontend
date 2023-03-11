@@ -1,14 +1,54 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserContext } from "../../App";
 
 function Signup() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const { updateUserData } = useContext(UserContext);
+  
+
+  const onHandleSubmit = (e) => {
+    e.preventDefault();
+    setMessage("");
+    axios
+      .post(`http://127.0.0.1:8000/api/v1/auth/register/`, {
+        email,
+        password,
+        name: name,
+      })
+      .then((response) => {
+        let data = response.data.data;
+        console.log(response.data);
+        let status_code = response.data.status_code;
+        if (status_code === 6000) {
+          console.log(status_code);
+          localStorage.setItem("user_login_data", JSON.stringify(data));
+          updateUserData({ type: "LOGIN", payload: data });
+          navigate("/home");
+        } else {
+          setMessage(response.data.data);
+        }
+      })
+      .catch((error) => {
+        console.log("error", error.response);
+        if (error.response.status === 500) {
+          setMessage("Name,Email and Password:Field is required");
+        }
+        if (error.response.status === 401) {
+          setMessage(error.response.data.detail);
+        }
+      });
+  };
   return (
     <Container>
       <LeftContainer>
-        <HeaderContainer>
-          
-        </HeaderContainer>
+        <HeaderContainer></HeaderContainer>
         <MainHeading>
           Explore the best food recipes from diffrent publishers{" "}
         </MainHeading>
@@ -17,17 +57,33 @@ function Signup() {
         <LoginContainer>
           <LoginHeading>Register into Account</LoginHeading>
           <LoginInfo>Create an account to acccess all the features</LoginInfo>
-          <Form>
+          <Form onSubmit={onHandleSubmit}>
             <InputContainer>
-              <TextInput type="text" placeholder="Name" />
+              <TextInput
+                type="text"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </InputContainer>
             <InputContainer>
-              <TextInput type="email" placeholder="Email" />
+              <TextInput
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </InputContainer>
             <InputContainer>
-              <TextInput type="password" placeholder="Password" />
+              <TextInput
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </InputContainer>
             <LoginButton to="/auth/login/">Login Now</LoginButton>
+            {message && <ErrorMessage>{message}</ErrorMessage>}
 
             <ButtonContainer>
               <SubmitButton>Create an Account</SubmitButton>
@@ -69,7 +125,7 @@ const RightContainer = styled.div`
 `;
 const LoginContainer = styled.div`
   padding-bottom: 70px;
-  border-bottom: 1px solid #fff;
+  /* border-bottom: 1px solid #fff; */
   width: 100%;
 `;
 const LoginHeading = styled.h3`

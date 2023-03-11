@@ -1,9 +1,44 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import axios from "axios";
+import { UserContext } from "../../App";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const { updateUserData } = useContext(UserContext);
+  const onHandleSubmit = (e) => {
+    e.preventDefault();
+    setMessage("");
+    axios
+      .post(`http://127.0.0.1:8000/api/v1/auth/token/`, {
+        username: email,
+        password,
+      })
+      .then((response) => {
+        console.log(response.data);
+        let data = response.data;
+        localStorage.setItem("user_data", JSON.stringify(data));
+        updateUserData({ type: "LOGIN", payload: data });
+        navigate("/home");
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        if (error.response.status === 401) {
+          setMessage(error.response.data.detail);
+        } else {
+          if (error.response.data.username === "username") {
+            setMessage("email:field is required");
+          } else {
+            setMessage("email & password field is required");
+          }
+        }
+      });
+  };
   return (
     <>
       <Helmet>
@@ -21,15 +56,25 @@ function Login() {
           <LoginContainer>
             <LoginHeading>Login to your Account</LoginHeading>
             <LoginInfo>Enter email and password to login</LoginInfo>
-            <Form>
+            <Form onSubmit={onHandleSubmit}>
               <InputContainer>
-                <TextInput type="email" placeholder="Email" />
+                <TextInput
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </InputContainer>
               <InputContainer>
-                <TextInput type="password" placeholder="Password" />
+                <TextInput
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </InputContainer>
-              <LoginButton to="/auth/create/">Signup Now</LoginButton>
-
+              <LoginButton to="/auth/register/">Signup Now</LoginButton>
+              {message && <ErrorMessage>{message}</ErrorMessage>}
               <ButtonContainer>
                 <SubmitButton>Login</SubmitButton>
               </ButtonContainer>
