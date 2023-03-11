@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
 
 function Foods() {
   const [foods, setFoods] = useState([]);
@@ -14,11 +15,14 @@ function Foods() {
     return foods.map((item) => {
       return (
         <FoodItem key={item.id}>
-          <FoodImageContainer>
-            <FoodImage src={item.featured_image} />
-          </FoodImageContainer>
-          <FoodName>{item.name}</FoodName>
-          <PublisherName>{item.publisher_name}</PublisherName>
+          <Link to={`/description/${item.id}`}>
+            <FoodImageContainer>
+              <FoodImage src={item.featured_image} />
+            </FoodImageContainer>
+            <FoodName>{item.name}</FoodName>
+            <PublisherName>{item.publisher_name}</PublisherName>
+          </Link>
+
           {/* <PlaceLocation>
                 <LocationIcon>
                   <Icon src="" />
