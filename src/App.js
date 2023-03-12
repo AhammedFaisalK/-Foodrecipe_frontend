@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import Nav from "./Components/Includes/Nav";
+import AddRecipie from "./Components/Screens/AddRecipie";
 import Foods from "./Components/Screens/Foods";
 import Login from "./Components/Screens/Login";
 import Signup from "./Components/Screens/Signup";
@@ -47,6 +48,7 @@ function App() {
               element={<Navigate to="/auth/login/" element={<Login />} />}
             />
             <Route exact path="/home" element={<Foods />} />
+            <Route exact path="/home/add/" element={<AddRecipie />} />
             <Route exact path="/description/:id" element={<SingleFood />} />
             <Route path="/auth/login/" exact element={<Login />} />
             <Route path="/auth/register/" exact element={<Signup />} />

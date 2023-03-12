@@ -37,16 +37,16 @@ function SingleFood() {
         <CategoryContainer>
           <Category>{des.category}</Category>
 
-          <LocationName>{des.location}</LocationName>
+          <PublisherName> Publisher: {des.publisher_name}</PublisherName>
         </CategoryContainer>
-        <PlaceCard>
+        <FoodCard>
           <LeftContainer>
             <ImageContainer>
               <Image src={des.featured_image} />
             </ImageContainer>
           </LeftContainer>
           <RightContainer></RightContainer>
-        </PlaceCard>
+        </FoodCard>
         <Content>
           <Top>Food Ingredients</Top>
           <Cont>{des.ingredients}</Cont>
@@ -85,16 +85,13 @@ const Category = styled.span`
   border-radius: 30px;
   padding: 4px 8px;
 `;
-const LocationIcon = styled.img`
-  display: block;
-  margin-left: 10px;
-  margin-right: 5px;
-`;
-const LocationName = styled.h6`
+
+const PublisherName = styled.h6`
+  margin-left: 16px;
   font-size: 16px;
   color: #a2a2a2;
 `;
-const PlaceCard = styled.div`
+const FoodCard = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;

@@ -1,14 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
-
+export const FoodsContext = createContext();
 function Foods() {
   const [foods, setFoods] = useState([]);
-  const { userData } = useContext(UserContext);
+  const { userData, action } = useContext(UserContext);
+  const [search, setSearch] = useState("");
+  const [searchText, setSearchText] = useState("");
   const navi = useNavigate();
+ 
 
   const getFoods = async () => {
     const response = await axios
@@ -29,6 +32,28 @@ function Foods() {
         }
       });
   };
+  async function foodSerach(e) {
+    e.preventDefault();
+    setSearchText(search);
+    setSearch("");
+    await axios
+      .get(`http://127.0.0.1:8000/api/v1/foods/?q=${search}`, {
+        headers: {
+          Authorization: `Bearer ${userData?.access}`,
+        },
+      })
+      .then((res) => {
+        console.log("res", res);
+        setFoods(res.data.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+        if (error.response.status && error.response.status === 401) {
+          navi("/auth/login");
+        }
+      });
+  }
   const getFoodRecipes = () => {
     return foods.map((item) => {
       return (
@@ -38,15 +63,8 @@ function Foods() {
               <FoodImage src={item.featured_image} />
             </FoodImageContainer>
             <FoodName>{item.name}</FoodName>
-            <PublisherName>{item.publisher_name}</PublisherName>
+            <PublisherName>Publisher:{item.publisher_name}</PublisherName>
           </Link>
-
-          {/* <PlaceLocation>
-                <LocationIcon>
-                  <Icon src="" />
-                </LocationIcon>
-               
-              </PlaceLocation> */}
         </FoodItem>
       );
     });
@@ -59,17 +77,39 @@ function Foods() {
       <Helmet>
         <title>Food | You must checkout </title>
       </Helmet>
-      <BodyContainer>
-        <InnerContainer>
-          <SubContainer>
-            <Heading>Welcome</Heading>
-            <SubHeading>Add Your Recipie</SubHeading>
-          </SubContainer>
-          <SubHeading>Explore food recipies</SubHeading>
-
-          <FoodsList>{getFoodRecipes()}</FoodsList>
-        </InnerContainer>
-      </BodyContainer>
+      <FoodsContext.Provider value={foods}>
+        <BodyContainer>
+          <InnerContainer>
+            <SubContainer>
+              <Heading>Welcome{userData.name}</Heading>
+              <Link to="add/">
+                <SubHeading>Add Your Recipie</SubHeading>
+              </Link>
+            </SubContainer>
+            <SubHeading>Explore food recipies</SubHeading>
+            <SearchBox>
+              <SearchForm onSubmit={foodSerach}>
+                <SearchInput
+                  className="search"
+                  value={search}
+                  type="search"
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
+                  placeholder="Search for keywords with foodname and publishername "
+                />
+                <SearchSubmit onClick={foodSerach}>Search</SearchSubmit>
+              </SearchForm>
+            </SearchBox>
+            {searchText ? (
+              <ResultHeading>Result of :{searchText}</ResultHeading>
+            ) : (
+              ""
+            )}
+            <FoodsList>{getFoodRecipes()}</FoodsList>
+          </InnerContainer>
+        </BodyContainer>
+      </FoodsContext.Provider>
     </>
   );
 }
@@ -136,4 +176,41 @@ const Icon = styled.img``;
 const SubContainer = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+const SearchBox = styled.div`
+  margin-bottom: 50px;
+`;
+const SearchForm = styled.form`
+  display: flex;
+  align-items: center;
+  background: #f4f4be;
+  padding: 18px 17px;
+  border-radius: 35px;
+  width: 38%;
+`;
+const SearchInput = styled.input`
+  display: block;
+  width: 100%;
+  padding: 10px 10px;
+  border: none;
+  opacity: 0.5;
+`;
+const SearchSubmit = styled.button`
+  margin-left: 5px;
+  display: inline-block;
+  border: 1px solid #000;
+  padding: 8px 14px;
+  font-size: 13px;
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.5s;
+  &:hover {
+    background-color: #ff6600;
+    color: #fff;
+  }
+`;
+const ResultHeading = styled.h3`
+  margin-bottom: 25px;
+  color: red;
 `;

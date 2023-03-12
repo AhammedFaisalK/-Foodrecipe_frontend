@@ -11,7 +11,6 @@ function Signup() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const { updateUserData } = useContext(UserContext);
-  
 
   const onHandleSubmit = (e) => {
     e.preventDefault();
