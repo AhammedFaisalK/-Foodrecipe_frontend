@@ -11,7 +11,6 @@ function Foods() {
   const [search, setSearch] = useState("");
   const [searchText, setSearchText] = useState("");
   const navi = useNavigate();
- 
 
   const getFoods = async () => {
     const response = await axios
@@ -32,7 +31,7 @@ function Foods() {
         }
       });
   };
-  
+
   async function foodSerach(e) {
     e.preventDefault();
     setSearchText(search);
@@ -82,9 +81,9 @@ function Foods() {
         <BodyContainer>
           <InnerContainer>
             <SubContainer>
-              <Heading>Welcome{userData.name}</Heading>
+              <Heading>Welcome</Heading>
               <Link to="add/">
-                <SubHeading>Add Your Recipie</SubHeading>
+                <SubHeading>Add Your Recipie →</SubHeading>
               </Link>
             </SubContainer>
             <SubHeading>Explore food recipies</SubHeading>

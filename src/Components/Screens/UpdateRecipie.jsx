@@ -35,7 +35,7 @@ function UpdateRecipie() {
   };
   return (
     <MainContainer>
-      <Heading>Update Your Recipie Here</Heading>
+      <Heading>Update Your Recipie Here ↓</Heading>
       <FormConatiner onSubmit={updateSingleFood}>
         <InputContainer>
           <Label for="id_name">Name</Label>

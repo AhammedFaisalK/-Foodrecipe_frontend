@@ -32,7 +32,7 @@ function AddRecipie() {
   };
   return (
     <MainContainer>
-      <Heading>Add Your Recipie Here</Heading>
+      <Heading>Add Your Recipie Here ↓</Heading>
       <FormConatiner onSubmit={addRecipieInfo}>
         <InputContainer>
           <Label for="id_name">Name</Label>
