@@ -42,7 +42,7 @@ function Login() {
   return (
     <>
       <Helmet>
-        <title>Login Page</title>
+        <title>AllRecipes| Login Page</title>
       </Helmet>
       <Container>
         <LeftContainer>
@@ -97,7 +97,7 @@ const LeftContainer = styled.div`
   padding: 40px 70px 70px;
 `;
 const HeaderContainer = styled.div``;
-const Logo = styled.img``;
+
 const MainHeading = styled.h1`
   font-size: 50px;
   font-style: italic;
@@ -116,7 +116,7 @@ const RightContainer = styled.div`
 `;
 const LoginContainer = styled.div`
   padding-bottom: 70px;
-  border-bottom: 1px solid #fff;
+  /* border-bottom: 1px solid #fff; */
   width: 100%;
 `;
 const LoginHeading = styled.h3`

@@ -10,8 +10,11 @@ import Nav from "./Components/Includes/Nav";
 import AddRecipie from "./Components/Screens/AddRecipie";
 import Foods from "./Components/Screens/Foods";
 import Login from "./Components/Screens/Login";
+import NoMatch from "./Components/Screens/NoMatch";
+import PreLoader from "./Components/Screens/PreLoader/PreLoader";
 import Signup from "./Components/Screens/Signup";
 import SingleFood from "./Components/Screens/SingleFood";
+import UpdateRecipie from "./Components/Screens/UpdateRecipie";
 
 export const UserContext = createContext();
 function App() {
@@ -36,7 +39,7 @@ function App() {
     setLoading(false);
   }, []);
   return loading ? (
-    <h1>loading</h1>
+    <PreLoader />
   ) : (
     <>
       <UserContext.Provider value={{ userData, updateUserData }}>
@@ -52,7 +55,11 @@ function App() {
             <Route exact path="/description/:id" element={<SingleFood />} />
             <Route path="/auth/login/" exact element={<Login />} />
             <Route path="/auth/register/" exact element={<Signup />} />
-            {/* <Route exact path="*" element={<NoMatch />} /> */}
+            <Route
+              path="/description/:id/update/:ID"
+              element={<UpdateRecipie />}
+            />
+            <Route exact path="*" element={<NoMatch />} />
           </Routes>
         </Router>
       </UserContext.Provider>

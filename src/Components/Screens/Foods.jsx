@@ -7,7 +7,7 @@ import { UserContext } from "../../App";
 export const FoodsContext = createContext();
 function Foods() {
   const [foods, setFoods] = useState([]);
-  const { userData, action } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const [search, setSearch] = useState("");
   const [searchText, setSearchText] = useState("");
   const navi = useNavigate();
@@ -32,6 +32,7 @@ function Foods() {
         }
       });
   };
+  
   async function foodSerach(e) {
     e.preventDefault();
     setSearchText(search);
@@ -75,7 +76,7 @@ function Foods() {
   return (
     <>
       <Helmet>
-        <title>Food | You must checkout </title>
+        <title>Food|Food Recipies </title>
       </Helmet>
       <FoodsContext.Provider value={foods}>
         <BodyContainer>
@@ -161,18 +162,11 @@ const FoodName = styled.h4`
   width: 92%;
   margin: 5px auto 0px;
 `;
-const PlaceLocation = styled.div`
-  display: flex;
-  width: 93%;
-  margin: 0 auto;
-`;
-const LocationIcon = styled.div``;
 const PublisherName = styled.span`
   display: inline-block;
   margin-left: 10px;
   font-size: 15px;
 `;
-const Icon = styled.img``;
 const SubContainer = styled.div`
   display: flex;
   justify-content: space-between;

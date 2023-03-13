@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 import { UserContext } from "../../App";
 
 function Signup() {
@@ -45,52 +46,58 @@ function Signup() {
       });
   };
   return (
-    <Container>
-      <LeftContainer>
-        <HeaderContainer></HeaderContainer>
-        <MainHeading>
-          Explore the best food recipes from diffrent publishers{" "}
-        </MainHeading>
-      </LeftContainer>
-      <RightContainer>
-        <LoginContainer>
-          <LoginHeading>Register into Account</LoginHeading>
-          <LoginInfo>Create an account to acccess all the features</LoginInfo>
-          <Form onSubmit={onHandleSubmit}>
-            <InputContainer>
-              <TextInput
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </InputContainer>
-            <InputContainer>
-              <TextInput
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </InputContainer>
-            <InputContainer>
-              <TextInput
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </InputContainer>
-            <LoginButton to="/auth/login/">Login Now</LoginButton>
-            {message && <ErrorMessage>{message}</ErrorMessage>}
+    <>
+      <Helmet>
+        <title>AllRecipes| Signup Page</title>
+      </Helmet>
 
-            <ButtonContainer>
-              <SubmitButton>Create an Account</SubmitButton>
-            </ButtonContainer>
-          </Form>
-        </LoginContainer>
-      </RightContainer>
-    </Container>
+      <Container>
+        <LeftContainer>
+          <HeaderContainer></HeaderContainer>
+          <MainHeading>
+            Explore the best food recipes from diffrent publishers{" "}
+          </MainHeading>
+        </LeftContainer>
+        <RightContainer>
+          <LoginContainer>
+            <LoginHeading>Register into Account</LoginHeading>
+            <LoginInfo>Create an account to acccess all the features</LoginInfo>
+            <Form onSubmit={onHandleSubmit}>
+              <InputContainer>
+                <TextInput
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </InputContainer>
+              <InputContainer>
+                <TextInput
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </InputContainer>
+              <InputContainer>
+                <TextInput
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </InputContainer>
+              <LoginButton to="/auth/login/">Login Now</LoginButton>
+              {message && <ErrorMessage>{message}</ErrorMessage>}
+
+              <ButtonContainer>
+                <SubmitButton>Create an Account</SubmitButton>
+              </ButtonContainer>
+            </Form>
+          </LoginContainer>
+        </RightContainer>
+      </Container>
+    </>
   );
 }
 
@@ -105,7 +112,6 @@ const LeftContainer = styled.div`
   padding: 40px 70px 70px;
 `;
 const HeaderContainer = styled.div``;
-const Logo = styled.img``;
 const MainHeading = styled.h1`
   font-size: 50px;
   font-style: italic;

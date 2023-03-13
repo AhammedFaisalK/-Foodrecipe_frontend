@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-function AddRecipie() {
+function UpdateRecipie() {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [foodName, setFoodName] = useState("");
   const [description, setDescription] = useState("");
   const [ingredients, setIngredients] = useState("");
 
-  const navigate = useNavigate();
+  const navi = useNavigate();
+  const { ID } = useParams();
 
-  const addRecipieInfo = async () => {
+  const updateSingleFood = async () => {
     let formField = new FormData();
+    console.log(ID);
 
     formField.append("name", foodName);
     formField.append("publisher_name", name);
@@ -23,17 +25,18 @@ function AddRecipie() {
       formField.append("featured_image", image);
     }
     await axios({
-      method: "post",
-      url: "http://127.0.0.1:8000/api/v1/foods/create/",
+      method: "PUT",
+      url: `http://127.0.0.1:8000/api/v1/foods/update/${ID}/`,
       data: formField,
     }).then((response) => {
-      navigate("/home");
+      console.log(response.data);
+      navi("/home");
     });
   };
   return (
     <MainContainer>
-      <Heading>Add Your Recipie Here</Heading>
-      <FormConatiner onSubmit={addRecipieInfo}>
+      <Heading>Update Your Recipie Here</Heading>
+      <FormConatiner onSubmit={updateSingleFood}>
         <InputContainer>
           <Label for="id_name">Name</Label>
           <TextInput
@@ -87,8 +90,8 @@ function AddRecipie() {
           ></TextArea>
         </InputContainer>
         <ButtonContainer>
-          <Link to="/home">
-            <SubmitButton onClick={addRecipieInfo}>Add Recipie</SubmitButton>{" "}
+          <Link>
+            <SubmitButton onClick={updateSingleFood}>Update</SubmitButton>{" "}
           </Link>
         </ButtonContainer>
       </FormConatiner>
@@ -96,7 +99,7 @@ function AddRecipie() {
   );
 }
 
-export default AddRecipie;
+export default UpdateRecipie;
 
 const MainContainer = styled.div`
   width: 85%;
